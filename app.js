@@ -18,6 +18,7 @@
 
 var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
+// require in the Watson Conversation SDK
 var Conversation = require('watson-developer-cloud/conversation/v1'); // watson sdk
 
 var app = express();
@@ -40,6 +41,8 @@ var conversation = new Conversation({
 // Endpoint to be call from the client side
 app.post('/api/message', function(req, res) {
   var workspace = process.env.WORKSPACE_ID || '<workspace-id>';
+
+  // error checks to see that workspaceID has been set
   if (!workspace || workspace === '<workspace-id>') {
     return res.json({
       'output': {
@@ -47,6 +50,8 @@ app.post('/api/message', function(req, res) {
       }
     });
   }
+
+  // builds a payload object
   var payload = {
     workspace_id: workspace,
     context: req.body.context || {},
